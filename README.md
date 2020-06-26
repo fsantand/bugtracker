@@ -1,0 +1,2 @@
+# Bugtracker
+Django based bugtracker
