@@ -18,9 +18,11 @@
         <div class="bug-list">
         <h3>Bugs</h3>
         <h4>Open: {{project.get_open_bugs.count }} - Closed: {{project.get_closed_bugs.count }} </h4>
+            <ul>
             {% for bug in project.get_open_bugs %}
-                <a href="{{ bug.get_absolute_url }}"> {{ bug }}</a>
+                <li><a href="{{ bug.get_absolute_url }}"> {{ bug }}</a></li>
             {% endfor %}
+            </ul>
         </div>
     </div>
 </body>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
 from apps.project.models import Project
 
 # Create your models here.
@@ -28,7 +29,11 @@ class Bug(models.Model):
     date_reported = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.title} ()'
+        return f'#{self.bug_number} - {self.title} ({self.Classification(self.classification).label})'
+
+    #def get_absolute_url(self):
+    #    return reverse("bug-thread", kwargs={"pk": self.pk})
+    
 
 class Comment(models.Model):
     bug = models.ForeignKey(Bug, on_delete=models.CASCADE, related_name='comments')    
