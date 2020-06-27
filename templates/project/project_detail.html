@@ -1,0 +1,27 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project }} : {{project.short_description}}</title>
+</head>
+<body>
+    <div class="title">
+        <h1>{{ project.name }}</h1>
+        <h2>{{ project.owner }}</h2>
+        <p> {{ project.short_description }} </p>
+    </div>
+    <div class="issues">
+        <a role="button" href="{% url 'report-bug' project.pk%}">Report Bug</a>
+        <hr>
+        <div class="bug-list">
+        <h3>Bugs</h3>
+        <h4>Open: {{project.get_open_bugs.count }} - Closed: {{project.get_closed_bugs.count }} </h4>
+            {% for bug in project.get_open_bugs %}
+                <a href="{{ bug.get_absolute_url }}"> {{ bug }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

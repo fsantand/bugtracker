@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
 
 # Create your models here.
 class Project(models.Model):
@@ -13,3 +14,16 @@ class Project(models.Model):
 
     def __str__(self):
         return f'{self.owner}/{self.name}'
+
+    def get_absolute_url(self):
+        return reverse("project", kwargs={"pk": self.pk})
+
+    def get_open_bugs(self):
+        return self.bugs.filter(is_open = True)
+
+    def get_closed_bugs(self):
+        return self.bugs.filter(is_open = False)
+
+    def get_bug_num(self):
+        return self.bugs.count() + 1
+    
