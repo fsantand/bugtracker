@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView, CreateView, TemplateView
 
 from .models import Project
-from apps.bug.models import Bug
+from apps.bug.models import Bug, Comment
 
 # Create your views here.
 class ProjectDetail(DetailView):
@@ -33,6 +33,20 @@ class ReportBug(CreateView):
 
 class BugThread(TemplateView):
     template_name = 'bug/bug_detail.html'
+
+    def post(self, request, project, bug_number):
+        bug = Bug.objects.get(project__pk = project, bug_number = bug_number)
+        comm = Comment(
+            bug = bug,
+            commenter = request.user,
+            comment = request.POST['comment']
+        )
+        comm.save()
+        if request.POST['is_open']:
+            bug.close_bug()
+            print(f'The bug {bug} is now closed.')
+
+        return redirect('bug-thread', project, bug_number)
 
     def get_context_data(self, **kwargs):
         bug = Bug.objects.get(project__pk = self.kwargs['project'], bug_number = self.kwargs['bug_number'])

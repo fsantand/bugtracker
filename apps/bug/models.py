@@ -36,6 +36,10 @@ class Bug(models.Model):
 
     def get_classification(self):
         return self.Classification(self.classification).label
+
+    def close_bug(self):
+        self.is_open = False
+        self.save()
     
 
 class Comment(models.Model):

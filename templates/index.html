@@ -10,7 +10,16 @@
     <h2>Projects</h2>
     <ul>
         {% for project in projects %}
-            <li><a href="{{ project.get_absolute_url }}">{{ project}}</a> - Bugs: {{ project.get_open_bugs.count }} </li>
+            <li><a href="{{ project.get_absolute_url }}">{{ project}}</a> - Open bugs: {{ project.get_open_bugs.count }} </li>
+        {% endfor %}
+    </ul>
+    <h2>Latest bugs</h2>
+    <ul>
+        {% for bug in bugs %}
+            <li>
+                <a href="{{ bug.get_absolute_url }}"> {{bug}}</a>
+                Status: {% if bug.is_open %}Open{% else %}Closed{% endif %}
+            </li>
         {% endfor %}
     </ul>
 </body>
