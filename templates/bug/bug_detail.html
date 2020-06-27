@@ -1,0 +1,33 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{bug.project}} - {{bug.title}}</title>
+</head>
+<body>
+    <div class="title">
+        <h1>#{{bug.bug_number}} - {{bug.title}}</h1>
+        <h3>Project: <a href="{{bug.project.get_absolute_url}}">{{bug.project}}</a></h3>
+        <h3>Classification: {{bug.get_classification}} </h3>
+    </div>
+    <div>
+    <span><a href="{{bug.reporter.get_absolute_url}}">{{bug.reporter}}</a>:</span>
+    <p>{{ bug.description }}</p>
+    <span> Reported {{bug.date_reported | naturaltime }} </span>
+    </div>
+    <div class="comments">
+        {% for c in bug.comments.all %}
+        <hr>
+        <span><a href="{{c.commenter.get_absolute_url}}">{{c.commenter}}</a>:</span>
+        <p>{{ c.comment }}</p>
+        <span>{{ c.date_commented | naturaltime }}</span>
+        {% endfor %}
+    </div>
+    <hr>
+    {% if not bug.is_open %} CLOSED BUG
+    {% else %}
+    {% endif %}
+</body>
+</html>

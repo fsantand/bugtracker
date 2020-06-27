@@ -31,8 +31,11 @@ class Bug(models.Model):
     def __str__(self):
         return f'#{self.bug_number} - {self.title} ({self.Classification(self.classification).label})'
 
-    #def get_absolute_url(self):
-    #    return reverse("bug-thread", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("bug-thread", kwargs={"project": self.project.pk ,"bug_number": self.bug_number})
+
+    def get_classification(self):
+        return self.Classification(self.classification).label
     
 
 class Comment(models.Model):
@@ -43,3 +46,6 @@ class Comment(models.Model):
     )
     comment = models.TextField()
     date_commented = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date_commented']
