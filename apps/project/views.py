@@ -12,6 +12,7 @@ class ProjectDetail(DetailView):
 class ProjectCreate(LoginRequiredMixin,CreateView):
     model = Project
     fields = ['name', 'short_description']
+    login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.owner = self.request.user

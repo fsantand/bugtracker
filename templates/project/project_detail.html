@@ -1,33 +1,28 @@
+{% extends 'base.html' %}
 {% load humanize %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ project }} : {{project.short_description}}</title>
-</head>
-<body>
-    <a href="{% url 'index' %}">Back</a>
-    <div class="title">
-        <h1>{{ project.name }}</h1>
-        <h2>{{ project.owner }}</h2>
-        <p> {{ project.short_description }} </p>
-        {% if project.administrators.count > 0 %}
-            <p>Admins: {% for admin in project.administrators.all %} <span>{{ admin }}</span> {% endfor %}</p>
-        {% endif %}
+{% block title %} - {{ project }} : {{project.short_description}}{% endblock title %}
+{% block content %}
+<div class="title">
+    <h1>{{ project }}</h1>
+    <h3 class="text-muted">Created {{ project.creation_date | naturaltime}} </h3>
+    <p> {{ project.short_description }} </p>
+    {% if project.administrators.count > 0 %}
+        <p><b>Staff</b> {% for admin in project.administrators.all %} <span class="badge badge-primary">{{ admin }}</span> {% endfor %}</p>
+    {% endif %}
+</div>
+<div class="issues">
+    <a role="button" href="{% url 'report-bug' project.pk%}">Report Bug</a>
+    <hr>
+    <div class="bug-list">
+    <h3>Bugs</h3>
+    {% comment %} <h4><span class="badge badge-pill badge-warning">Open {{ project.get_open_bugs.count }}</span> <span class="badge badge-pill badge-success">Closed {{project.get_closed_bugs.count }}</span> </h4> {% endcomment %}
+    <button class="btn btn-primary">Open <span class="badge badge-light">{{ project.get_open_bugs.count }}</span></button>
+    <button class="btn btn-success">Closed <span class="badge badge-light">{{ project.get_closed_bugs.count }}</span></button>
+        <ul>
+        {% for bug in project.get_open_bugs %}
+            <li><a href="{{ bug.get_absolute_url }}"> {{ bug }}</a></li>
+        {% endfor %}
+        </ul>
     </div>
-    <div class="issues">
-        <a role="button" href="{% url 'report-bug' project.pk%}">Report Bug</a>
-        <hr>
-        <div class="bug-list">
-        <h3>Bugs</h3>
-        <h4>Open: {{project.get_open_bugs.count }} - Closed: {{project.get_closed_bugs.count }} </h4>
-            <ul>
-            {% for bug in project.get_open_bugs %}
-                <li><a href="{{ bug.get_absolute_url }}"> {{ bug }}</a></li>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
-</body>
-</html>
+</div>
+{% endblock content %}

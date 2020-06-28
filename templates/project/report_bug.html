@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{project}} - Report Bug</title>
-</head>
-<body>
-    <p>Reported by: {{user}}</p>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Report">
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %} - {{project}} - Report Bug{% endblock title %}
+{% block content %}
+<p>Reported by: {{user}}</p>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Report">
+</form>
+{% endblock content %}
