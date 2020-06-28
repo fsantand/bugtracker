@@ -145,6 +145,7 @@ dmypy.json
 .pytype/
 
 # custom
+staticfiles
 .vscode
 
 # End of https://www.toptal.com/developers/gitignore/api/django

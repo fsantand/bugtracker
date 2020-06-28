@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, CreateView, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
 from apps.bug.models import Bug, Comment
@@ -7,6 +8,15 @@ from apps.bug.models import Bug, Comment
 # Create your views here.
 class ProjectDetail(DetailView):
     model = Project
+
+class ProjectCreate(LoginRequiredMixin,CreateView):
+    model = Project
+    fields = ['name', 'short_description']
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
 
 class ReportBug(CreateView):
     model = Bug
@@ -41,11 +51,13 @@ class BugThread(TemplateView):
             commenter = request.user,
             comment = request.POST['comment']
         )
+        if 'close_thread' in request.POST.keys():
+            close_thread = request.POST['close_thread']
+            print(close_thread)
+            if close_thread:
+                bug.close_bug()
+                print(f'The bug {bug} is now closed.')
         comm.save()
-        if request.POST['is_open']:
-            bug.close_bug()
-            print(f'The bug {bug} is now closed.')
-
         return redirect('bug-thread', project, bug_number)
 
     def get_context_data(self, **kwargs):

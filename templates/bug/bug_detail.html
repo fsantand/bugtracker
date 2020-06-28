@@ -1,50 +1,44 @@
+{% extends 'base.html' %}
 {% load humanize %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{bug.project}} - {{bug.title}}</title>
-</head>
-<body>
-    <div class="title">
+{% block title %}{{bug.project}} - {{bug.title}}{% endblock title %}
+{% block content %}
+<div class="title">
         <h1>#{{bug.bug_number}} - {{bug.title}}</h1>
         <h3>Project: <a href="{{bug.project.get_absolute_url}}">{{bug.project}}</a></h3>
         <h3>Classification: {{bug.get_classification}} </h3>
     </div>
-    <div>
-    <span><a href="{{bug.reporter.get_absolute_url}}">{{bug.reporter}}</a>:</span>
-    <p>{{ bug.description }}</p>
-    <span> Reported {{bug.date_reported | naturaltime }} </span>
-    </div>
-    <div class="comments">
-        {% for c in bug.comments.all %}
-        <hr>
-        <div id="comment-{{c.pk}}">
-            <span><a href="{{c.commenter.get_absolute_url}}">{{c.commenter}}</a>:</span>
-            <p>{{ c.comment | safe }}</p>
-            <span>{{ c.date_commented | naturaltime }}</span>
-        </div>
-        {% endfor %}
-    </div>
+<div>
+<span><a href="{{bug.reporter.get_absolute_url}}">{{bug.reporter}}</a>:</span>
+<p>{{ bug.description }}</p>
+<span> Reported {{bug.date_reported | naturaltime }} </span>
+</div>
+<div class="comments">
+    {% for c in bug.comments.all %}
     <hr>
-    {% if not bug.is_open %} CLOSED BUG
-    {% else %}
-    <div>
-        <h3>Comment</h3>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="bug" value="{{ bug.pk }}">
-            <textarea name="comment" id="" cols="30" rows="10" placeholder="Write a comment here..."></textarea>
-            {% if True %}
-                <div>
-                    <label for="is_open">Close thread ?</label>
-                    <input type="checkbox" name="is_open" id="is_open">
-                </div>
-            {% endif %}
-            <button type="submit">Comment</button>
-        </form>
+    <div id="comment-{{c.pk}}">
+        <span><a href="{{c.commenter.get_absolute_url}}">{{c.commenter}}</a>:</span>
+        <p>{{ c.comment | safe }}</p>
+        <span>{{ c.date_commented | naturaltime }}</span>
     </div>
-    {% endif %}
-</body>
-</html>
+    {% endfor %}
+</div>
+<hr>
+{% if not bug.is_open %} CLOSED BUG
+{% else %}
+<div>
+    <h3>Comment</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="bug" value="{{ bug.pk }}">
+        <textarea name="comment" id="" cols="30" rows="10" placeholder="Write a comment here..."></textarea>
+        {% if user in bug.project.administrators.all or user == bug.project.owner %}
+            <div>
+                <label for="close_thread">Close thread ?</label>
+                <input type="checkbox" name="close_thread" id="close_thread">
+            </div>
+        {% endif %}
+        <button type="submit">Comment</button>
+    </form>
+</div>
+{% endif %}
+{% endblock content %}

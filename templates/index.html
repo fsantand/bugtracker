@@ -1,26 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bugtracker</title>
-</head>
-<body>
-    <h1>Bugtracker</h2>
-    <h2>Projects</h2>
-    <ul>
-        {% for project in projects %}
-            <li><a href="{{ project.get_absolute_url }}">{{ project}}</a> - Open bugs: {{ project.get_open_bugs.count }} </li>
-        {% endfor %}
-    </ul>
-    <h2>Latest bugs</h2>
-    <ul>
-        {% for bug in bugs %}
-            <li>
-                <a href="{{ bug.get_absolute_url }}"> {{bug}}</a>
-                Status: {% if bug.is_open %}Open{% else %}Closed{% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %} - Home {% endblock title %}
+{% block content %}
+<h1>Bugtracker</h2>
+<h2>Projects <a href="{% url 'project-create'%}">+</a></h2>
+<ul>
+    {% for project in projects %}
+        <li><a href="{{ project.get_absolute_url }}">{{ project}}</a> - Open bugs: {{ project.get_open_bugs.count }} </li>
+    {% endfor %}
+</ul>
+<h2>Latest bugs</h2>
+<ul>
+    {% for bug in bugs %}
+        <li>
+            <a href="{{ bug.get_absolute_url }}"> {{bug}}</a>
+            Status: {% if bug.is_open %}Open{% else %}Closed{% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

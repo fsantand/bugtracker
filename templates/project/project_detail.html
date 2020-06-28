@@ -12,6 +12,9 @@
         <h1>{{ project.name }}</h1>
         <h2>{{ project.owner }}</h2>
         <p> {{ project.short_description }} </p>
+        {% if project.administrators.count > 0 %}
+            <p>Admins: {% for admin in project.administrators.all %} <span>{{ admin }}</span> {% endfor %}</p>
+        {% endif %}
     </div>
     <div class="issues">
         <a role="button" href="{% url 'report-bug' project.pk%}">Report Bug</a>

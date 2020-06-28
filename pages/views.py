@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
+from django.contrib.auth.views import LoginView, LogoutView
 from apps.project.models import Project
 from apps.bug.models import Bug
 
@@ -11,4 +12,10 @@ def index(request):
         'bugs':bugs
     }
     return render(request, 'index.html', ctx)
+
+class UserLogin(LoginView):
+    template_name = 'registration/login.html'
+    next = 'index'
     
+class UserLogout(LogoutView):
+    next_page = 'index'

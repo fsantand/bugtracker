@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugtracker{% block title %}{% endblock title %} </title>
+    <link rel="stylesheet" href="{% static 'pages/css/style.css' %}">
+    {% block extra-style %}
+    {% endblock extra-style %}
+</head>
+<body>
+    {% include 'partials/_navbar.html' %}
+    {% block content %}
+    {% endblock content %}
+</body>
+{% block extra-javascript %}
+{% endblock extra-javascript %}
+</html>
